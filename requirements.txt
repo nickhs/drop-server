@@ -1,5 +1,4 @@
 flask
-supervisor
 flask-sqlalchemy
 fabric
 ansible

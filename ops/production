@@ -1,7 +1,7 @@
 # file: production
 
 [webservers]
-104.131.190.183 ansible_ssh_user=root
+130.211.122.71
 
 [dbservers]
-104.131.190.183 ansible_ssh_user=root
+130.211.122.71
