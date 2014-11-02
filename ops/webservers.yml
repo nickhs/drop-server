@@ -1,0 +1,25 @@
+- hosts: webservers
+  sudo: yes
+  gather_facts: no
+
+  tasks:
+    - name: ensure apt-cache is up to date
+      action: apt update_cache=yes
+
+    - name: ensure packages are installed
+      action: apt name={{item}}
+      with_items:
+        - nginx
+        - libmcrypt-dev
+
+    - name: ensure folders exists
+      file: dest={{item}} state=directory
+      with_items:
+        - /srv/snapchat_saves
+        - /var/log/drop-server
+
+#    - name: fetch the server
+#      git: repo=ssh://git@github.com/nickhs/drop-server.git dest=/srv/drop-server accept_hostkey=true
+
+    - name: install requirements
+      pip: requirements=/srv/drop-server/requirements.txt extra_args="--allow-external python-mcrypt --allow-unverified python-mcrypt"
