@@ -1,0 +1,5 @@
+- name: Install nginx
+  action: apt name=nginx state=present
+
+- name: Add nginx config files
+  template: src=
