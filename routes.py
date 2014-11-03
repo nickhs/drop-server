@@ -11,10 +11,19 @@ def index():
 
 @app.route('/photos', methods=['GET'])
 def get_new_ids():
-    photos = Photo.query.filter(Photo.deleted_at == None) \
+    photo_query = Photo.query.filter(Photo.deleted_at == None) \
                         .filter(Photo.seen_at == None) \
-                        .limit(25) \
-                        .all()
+                        .limit(25)
+
+    if 'id' in request.args:
+        offset = request.args['id']
+        try:
+            offset = int(offset)
+            photo_query = photo_query.offset(offset)
+        except:
+            pass
+
+    photos = photo_query.all()
 
     photos = [x.to_dict() for x in photos]
     return jsonify({'results': photos})
