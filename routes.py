@@ -51,3 +51,12 @@ def get_photo(local_path):
         abort(404)
 
     return app.send_static_file(dest)
+
+
+@app.route('/photos/length')
+def get_photo_length():
+    photos = Photo.query.filter(Photo.deleted_at == None) \
+                        .filter(Photo.seen_at == None) \
+                        .count()
+
+    return jsonify({'results': photos})
