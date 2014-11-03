@@ -29,9 +29,9 @@ def get_new_ids():
     return jsonify({'results': photos})
 
 
-@app.route('/photos/<int:id>', methods=['GET, DELETE'])
+@app.route('/photos/<int:id>', methods=['GET', 'DELETE'])
 def get_photo_by_id(id):
-    photo = Photo.get(id)
+    photo = Photo.query.get(id)
     if not photo:
         abort(404)
 
