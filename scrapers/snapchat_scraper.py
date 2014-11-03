@@ -15,6 +15,11 @@ CREDS = {
         'req_token': '168adb23c9deb9b9bd40261435c3dcfe43f26f88c8d66339ecc2b87c7e543ea6',
         'timestamp': '1414956250195',
         'username': 'birwin93'
+    },
+    'cconeil': {
+        'req_token': '6c5d3758db73277de63d93dc8aff1a073aab28cd43e6c177eaec58413f6e9839',
+        'timestamp': '1414981556372',
+        'username': 'cconeil'
     }
 }
 
