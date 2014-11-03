@@ -45,7 +45,7 @@ def get_relative_filename(media_id, timestamp, user_id):
         day = 'FAIL'
 
     dest = os.path.join(year, month, day,
-            "%s-%s-%s-%s.jpg" % (media_id, timestamp, user_id, SERVICE))
+            "%s-%s-%s.jpg" % (media_id, timestamp, SERVICE))
     return dest
 
 
@@ -145,6 +145,7 @@ if __name__ == '__main__':
             extract_media(item['media_key'], item['media_iv'], item['local_location'], dest)
             photo = Photo(
                 rel_location=get_relative_filename(item['media_id'], item['timestamp'], username),
+                external_id=item['media_id'],
                 owner=username,
                 service=SERVICE
             )
