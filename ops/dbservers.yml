@@ -2,9 +2,6 @@
   sudo: yes
 
   tasks:
-    - name: ensure apt-cache is up to date
-      action: apt update_cache=yes
-
     - name: ensure packages are installed
       action: apt name={{item}}
       with_items:
@@ -13,8 +10,9 @@
         - python-psycopg2
 
 - hosts: dbservers
-  sudo: yes
-  sudo_user: postgres
+  su: yes
+  su_user: postgres
+  gather_facts: no
 
   vars:
     dbname: drop-server

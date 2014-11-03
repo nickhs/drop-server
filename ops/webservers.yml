@@ -10,6 +10,7 @@
         - libmcrypt-dev
         - git
         - python-pip
+        - python-dev
 
     - name: ensure folders exists
       file: dest={{item}} state=directory

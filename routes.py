@@ -32,7 +32,7 @@ def get_photo_by_id(id):
     return jsonify(photo.to_dict())
 
 
-@app.route('/static/photos/<path:local_path>/')
+@app.route('/static/photos/<path:local_path>')
 def get_photo(local_path):
     if '..' in local_path:
         abort(403)
