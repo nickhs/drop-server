@@ -2,6 +2,7 @@ from flask import abort, jsonify, request
 from core import app, config
 from models import Photo
 import os
+from datetime import datetime, timedelta
 
 
 @app.route('/')
@@ -12,7 +13,8 @@ def index():
 @app.route('/photos', methods=['GET'])
 def get_new_ids():
     photo_query = Photo.query.filter(Photo.deleted_at == None) \
-                        .filter(Photo.seen_at == None)
+                             .filter(Photo.seen_at == None) \
+                             .filter(Photo.created_at > datetime.now() - timedelta(hours=24))
 
     if 'id' in request.args:
         offset = request.args['id']
