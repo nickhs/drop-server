@@ -184,11 +184,14 @@ if __name__ == '__main__':
                 pass
 
             extract_media(item['media_key'], item['media_iv'], item['local_location'], dest, item=item)
+            is_video = True if item['media_type'] in (SnapchatStatics.VIDEO, SnapchatStatics.VIDEO_NOAUDIO) else False
+
             photo = Photo(
                 rel_location=get_relative_filename(item['media_id'], item['timestamp'], username, item['media_type']),
                 external_id=item['media_id'],
                 owner=username,
-                service=SERVICE
+                service=SERVICE,
+                is_video=is_video
             )
 
             db.session.add(photo)
