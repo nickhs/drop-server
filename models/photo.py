@@ -16,12 +16,14 @@ class Photo(db.Model, ModelMixin):
     rel_location = db.Column(db.String, unique=True, index=True)
     external_id = db.Column(db.String, index=True)
     seen_at = db.Column(db.DateTime)
+    is_video = db.Column(db.Boolean)
 
-    def init(self, rel_location, service=Services.SNAPCHAT, owner=None, external_id=None):
+    def init(self, rel_location, service=Services.SNAPCHAT, owner=None, external_id=None, is_video=False):
         self.rel_location = rel_location
         self.service = service
         self.owner = owner
-        self.external_id = self.external_id
+        self.external_id = external_id
+        self.is_video = is_video
 
     @property
     def location(self):
