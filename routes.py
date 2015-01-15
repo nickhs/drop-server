@@ -1,13 +1,13 @@
 from flask import abort, jsonify, request
-from core import app, config
-from models import Photo
+from core import app, config, db
+from models import Photo, User
 import os
 from datetime import datetime, timedelta
 
 
 @app.route('/')
 def index():
-    return 'Billy is a filthy jew'
+    return 'Nothing here buddy.'
 
 
 @app.route('/photos', methods=['GET'])
@@ -61,3 +61,36 @@ def get_photo_length():
                         .count()
 
     return jsonify({'results': photos})
+
+
+@app.route('/users', methods=['GET', 'POST', 'DELETE'])
+def handle_users():
+    if request.method == 'POST':
+        username = request.form['username']
+        u = User.query.filter_by(username=username).first()
+
+        if u is None:
+            u = User(username)
+
+        u.change_data(
+            req_token=request.form.get('req_token'),
+            timestamp=request.form.get('timestamp'),
+            username=request.form.get('username'),
+            data=request.form.get('data')
+        )
+
+        db.session.add(u)
+        db.session.commit()
+        return 'ok'
+
+    elif request.method == 'GET':
+        users = User.query.all()
+        return jsonify({'results': [x.to_dict() for x in users]})
+
+    elif request.method == 'DELETE':
+        username = request.form['username']
+        u = User.query.filter_by(username=username).first()
+        if u:
+            db.session.delete(u)
+            db.session.commit()
+        return 'ok'

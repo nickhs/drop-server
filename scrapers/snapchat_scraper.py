@@ -4,10 +4,11 @@ import requests
 import tempfile
 import os
 from datetime import datetime
-from models import Photo, Services
+from models import Photo, Services, User
 from core import config, db
 import zipfile
 import StringIO
+import json
 
 '''
 'cconeil': {
@@ -29,7 +30,7 @@ CREDS = {
         'req_token': '567ce9dcea9cd60288e103555030554eec1d349511c0d0fe7850fd315fd9455c',
         'timestamp': '1420750724488',
         'username': 'birwin93',
-        'features_map': {"stories_delta_response": True},
+        'features_map': {'stories_delta_response': True},
         'checksum': ''
     }
 }
@@ -88,7 +89,6 @@ def scrape(endpoint, username, form_payload=None):
     resp = s.post(API_SERVER + endpoint, data=form_payload)
     if not resp.ok:
         print "Failed to make request %s" % resp
-        import pdb; pdb.set_trace()
         return []
 
     payload = resp.json()
@@ -171,9 +171,13 @@ def extract_media(key, iv, infile, outfile, delete=True, item=None):
 if __name__ == '__main__':
     new_snaps = 0
 
-    for username, value in CREDS.iteritems():
+    creds = User.query.filter(User.service == Services.SNAPCHAT).all()
+
+    for user in creds:
+        username = user.username
+
         print "Fetching %s snap stories" % username
-        media_items = scrape(ENDPOINT, username, form_payload=value)
+        media_items = scrape(ENDPOINT, username, form_payload=json.loads(user.data))
         new_snaps += len(media_items)
 
         for item in media_items:
