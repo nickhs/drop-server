@@ -10,33 +10,24 @@ import zipfile
 import StringIO
 import json
 
-'''
-'cconeil': {
-    'req_token': '6c5d3758db73277de63d93dc8aff1a073aab28cd43e6c177eaec58413f6e9839',
-    'timestamp': '1414981556372',
-    'username': 'cconeil'
-},
-'eflatt': {
-    'req_token': 'bb4d7fd460d8eef68af888875d151adc407ad862ceb5efb1471b5942a50909ee',
-    'timestamp': '1414957873399',
-    'username:': 'eflatt'
-}
-'''
-
 SERVICE = Services.SNAPCHAT
 
+'''
 CREDS = {
-    'birwin93': {
-        'req_token': '567ce9dcea9cd60288e103555030554eec1d349511c0d0fe7850fd315fd9455c',
+    'xxxxin93': {
+        'req_token': 'xxxxxxx',
         'timestamp': '1420750724488',
-        'username': 'birwin93',
+        'username': 'xxxxin93',
         'features_map': {'stories_delta_response': True},
         'checksum': ''
     }
 }
+'''
 
 API_SERVER = 'https://feelinsonice-hrd.appspot.com'
 ENDPOINT = '/bq/stories'
+
+BLACKLIST = ['gchiminski']
 
 
 class SnapchatStatics:
@@ -78,7 +69,10 @@ def get_absolute_filename(media_id, timestamp, user_id, file_type):
             get_relative_filename(media_id, timestamp, user_id, file_type))
 
 
-def scrape(endpoint, username, form_payload=None):
+def scrape(endpoint, username, form_payload=None, blacklist=None):
+    if blacklist is None:
+        blacklist = []
+
     s = requests.Session()
     s.headers.update({
         'User-Agent': 'Snapchat/8.1.0.12 (iPhone7,2; iOS 8.1; gzip)',
@@ -103,6 +97,10 @@ def scrape(endpoint, username, form_payload=None):
     for friend in friend_stories:
         for story in friend['stories']:
             story_data = story['story']
+
+            if story_data.get('username', None) in blacklist:
+                print "Skipping story from %s" % story_data.get('username', None)
+                continue
 
             if story_data['media_type'] not in (SnapchatStatics.VIDEO, SnapchatStatics.VIDEO_NOAUDIO, SnapchatStatics.IMAGE):
                 continue
@@ -177,7 +175,7 @@ if __name__ == '__main__':
         username = user.username
 
         print "Fetching %s snap stories" % username
-        media_items = scrape(ENDPOINT, username, form_payload=json.loads(user.data))
+        media_items = scrape(ENDPOINT, username, form_payload=json.loads(user.data), blacklisk=BLACKLIST)
         new_snaps += len(media_items)
 
         for item in media_items:
