@@ -175,7 +175,7 @@ if __name__ == '__main__':
         username = user.username
 
         print "Fetching %s snap stories" % username
-        media_items = scrape(ENDPOINT, username, form_payload=json.loads(user.data), blacklisk=BLACKLIST)
+        media_items = scrape(ENDPOINT, username, form_payload=json.loads(user.data), blacklist=BLACKLIST)
         new_snaps += len(media_items)
 
         for item in media_items:
